@@ -3,6 +3,8 @@ import streamlit as st
 import pickle
 import requests
 
+import pandas as pd
+
 # function to fetch poster from api
 def fetch_poster(movie_title):
     response = requests.get(' http://www.omdbapi.com/?t={}&apikey=7a197950'.format(movie_title))
@@ -15,7 +17,7 @@ def fetch_poster(movie_title):
 # function for recommandations
 def recommend(movie):
     movie_index = movies_list[movies_list['title'] == movie].index[0]
-    distances = similarity[movie_index]
+    distances = likeness[movie_index]
     movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:9]
 
     recommend_movies = []
@@ -29,19 +31,25 @@ def recommend(movie):
 
     return recommend_movies,recommended_movie_posters
 
-# bringing data
-similarity = pickle.load(open('similarity.pkl', 'rb'))
+# reading compressed data
+with open('likeness.pkl', 'rb') as file:
+    likeness = pickle.load(file)
 
-movies_list = pickle.load(open('movies.pkl', 'rb'))
 
-# write simple text
-st.write(":orange[Project showcasing content based recommendation system by Pete Chisamba.]")
+with open('movies.pkl', 'rb') as file:
+    movies_list = pickle.load(file)
+
+# writing simple text
+st.image('image_logo.png')
+st.write(":orange[Project showcasing content based recommendation system by Pete Chisamba.] ")
 st.write(":red[Let NLP (Natural Language Processing) recommend the next Movies for you.]")
-
-st.title('Content Based Recommender System.')
+st.divider()
+title = 'Content Based Recommender System.'
+main_title = f'<ul><p style="font-family:Arial; color:red; font-size: 36px; font-weight:bold";text-align: justify>{title}</p></ul>'
+st.markdown(main_title, unsafe_allow_html=True)
 
 selected_movie_name = st.selectbox(
-    'Which film would you like to search for?',
+    'Which film would you like to search for? :green[(This app recommends the next closest to your preference.)]',
     movies_list['title'].values)
 
 image_not_found = "https://media.istockphoto.com/id/1055079680/vector/black-linear-photo-camera-like-no-image-available.jpg?s=612x612&w=0&k=20&c=P1DebpeMIAtXj_ZbVsKVvg-duuL0v9DlrOZUvPG6UJk="
