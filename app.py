@@ -16,7 +16,7 @@ def fetch_poster(movie_title):
 
 # function for recommandations
 def recommend(movie):
-    movie_index = movies_list[movies_list['title'] == movie].index[0]
+    movie_index = movies[movies['title'] == movie].index[0]
     distances = likeness[movie_index]
     movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:9]
 
@@ -24,20 +24,19 @@ def recommend(movie):
     recommended_movie_posters = []
     for i in movie_list:
 
-        recommend_movies.append(movies_list.loc[i[0], 'title'])
+        recommend_movies.append(movies.loc[i[0], 'title'])
 
         # fetch poster from api
-        recommended_movie_posters.append(fetch_poster(movies_list.loc[i[0], 'title']))
+        recommended_movie_posters.append(fetch_poster(movies.loc[i[0], 'title']))
 
     return recommend_movies,recommended_movie_posters
 
 # reading compressed data
-with open('likeness.pkl', 'rb') as file:
+with open('likeliness.pkl', 'rb') as file:
     likeness = pickle.load(file)
 
-
 with open('movies.pkl', 'rb') as file:
-    movies_list = pickle.load(file)
+    movies = pickle.load(file)
 
 # writing simple text
 st.image('image_logo.png')
@@ -50,7 +49,7 @@ st.markdown(main_title, unsafe_allow_html=True)
 
 selected_movie_name = st.selectbox(
     'Which film would you like to search for? :green[(This app recommends the next closest to your preference.)]',
-    movies_list['title'].values)
+    movies['title'].values)
 
 image_not_found = "https://media.istockphoto.com/id/1055079680/vector/black-linear-photo-camera-like-no-image-available.jpg?s=612x612&w=0&k=20&c=P1DebpeMIAtXj_ZbVsKVvg-duuL0v9DlrOZUvPG6UJk="
 
