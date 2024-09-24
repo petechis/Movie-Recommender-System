@@ -4,6 +4,12 @@ import pickle
 import requests
 import pandas as pd
 
+import numpy as np
+
+print(f"np======> {np.version.version}")
+print(f"pd------>{pd.__version__}")
+
+
 # function to fetch poster from api
 def fetch_poster(movie_title):
     response = requests.get(' http://www.omdbapi.com/?t={}&apikey=7a197950'.format(movie_title))
