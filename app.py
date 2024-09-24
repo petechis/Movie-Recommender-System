@@ -2,7 +2,6 @@
 import streamlit as st
 import pickle
 import requests
-
 import pandas as pd
 
 # function to fetch poster from api
@@ -35,7 +34,7 @@ def recommend(movie):
 with open('likeliness.pkl', 'rb') as file:
     likeness = pickle.load(file)
 
-with open('movies.pkl', 'rb') as file:
+with open('movies.pkl', 'rb') as file:    
     movies = pickle.load(file)
 
 # writing simple text
